@@ -18,9 +18,6 @@ const createUser = async(req,res)=>{
         console.log(err);
         res.status(500).json('Failed to create user');
     }
-    
-
-
 }
 
 module.exports = {createUser};
