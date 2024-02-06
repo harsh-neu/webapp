@@ -1,0 +1,27 @@
+const express = require ("express");
+const bodyParser = require("body-parser");
+
+require("dotenv").config();
+const routes = require('./src/routes/index');
+const app = express();
+
+app.use(bodyParser.json());
+app.use((err,req,res,next)=>{
+    res.set({
+        'X-Content-Type-Options':'nosniff',
+        'Cache-Control': 'no-cache, no-store, must-revalidate',
+        'Pragma':'no-cache'
+        });
+    if(err){
+        return res.status(400).send();
+    }
+    next();
+})
+routes(app);
+app.get("/",(req,res)=>{
+    res.json({message:"Welcome to Network structures And Cloud Computing"});
+})
+const PORT = process.env.PORT||3000;
+app.listen(PORT,()=>{
+    console.log(`Server is listening on port ${PORT}`);
+})
