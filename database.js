@@ -21,4 +21,6 @@
 // // app.use(....);
 
 // // const db = require(“./app/models”);
-// // db.sequelize.sync();
+// db.sequelize.sync();
+// enfienfienfienf
+// enfkenfikn
