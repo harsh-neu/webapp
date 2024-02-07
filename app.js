@@ -1,9 +1,11 @@
 const express = require ("express");
 const bodyParser = require("body-parser");
-
+const {connectDb} = require('./src/model/index');
 require("dotenv").config();
 const routes = require('./src/routes/index');
 const app = express();
+
+
 
 app.use(bodyParser.json());
 app.use((err,req,res,next)=>{
@@ -20,7 +22,10 @@ app.use((err,req,res,next)=>{
 routes(app);
 app.get("/",(req,res)=>{
     res.json({message:"Welcome to Network structures And Cloud Computing"});
-})
+});
+app.all('*', function(req, res){
+    res.status(404).send();
+  });
 const PORT = process.env.PORT||3000;
 app.listen(PORT,()=>{
     console.log(`Server is listening on port ${PORT}`);
