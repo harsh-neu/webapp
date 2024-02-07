@@ -6,5 +6,5 @@ const userRouter = require('./user.route');
 
 module.exports =  function(app){
     app.use("/healthz",healthzRouter);
-    app.use("/user",userRouter);
+    app.use("/v1/user",userRouter);
 }

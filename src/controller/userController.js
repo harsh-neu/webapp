@@ -19,7 +19,8 @@ const createUser = async(req,res)=>{
         }
        
         const response = await User.create(user);
-        console.log(user,"user")
+
+       
         res.status(201).json({
             emailId:response.emailId,
             firstName:response?.firstName,
@@ -27,14 +28,15 @@ const createUser = async(req,res)=>{
         });
     }catch(err){
         console.log(err);
-        res.status(500).json('Failed to create user');
+        res.status(400).send();
     }
 }
 
 const updateUser = async(req,res)=>{
     try{
+        //handle empty body
         if(!req.headers){
-            res.status(403).send();
+            res.status(401).send();
         }
         const clientCredentials = verifyBasicAuth(req.headers);
        
@@ -54,19 +56,57 @@ const updateUser = async(req,res)=>{
             res.status(400).send();
         }
         const user = {};
-        
+
+        if(Object.keys(req.body).length == 0){
+            res.status(400).send();
+        }
        for(key in req.body){
         user[key] = req.body[key];
        }
        console.log(user);
        const response = await User.update(user,{where:{emailId:"harsh1@gmail.com"}});
        console.log(response);
-       res.status(204).send();
+       res.status(200).send();
     }
     catch(err){
+        console.log(err);
+        res.status(400).send();
+    }
+}
+
+//add body validation
+const getUser = async(req,res)=>{
+    try{
+        if(!req.headers){
+            res.status(401).send();
+        }
+        const clientCredentials = verifyBasicAuth(req.headers);
+       
+        if(!clientCredentials){
+            res.status(401).send();
+        }
+        const authenticatedUser =  await User.findOne({where:{emailId:clientCredentials.emailId}}); 
+        if(!authenticatedUser){
+            res.status(401).send();
+        }
+        
+        const correctPassword =  bcrypt.compareSync(clientCredentials.password,authenticatedUser.password);
+        if(!correctPassword){
+            res.status(401).send();
+        }
+        if(req.is("*/*")){
+            return res.status(400).send();
+        }
+        res.status(200).json({
+            emailId:authenticatedUser.emailId,
+            firstName:authenticatedUser?.firstName,
+            lastName:authenticatedUser?.lastName,
+        });
+
+    }catch(err){
         console.log(err);
         res.status(500).send();
     }
 }
 
-module.exports = {createUser,updateUser};
+module.exports = {createUser,updateUser,getUser};
