@@ -9,11 +9,11 @@ const app = express();
 
 app.use(bodyParser.json());
 app.use((err,req,res,next)=>{
-    res.set({
-        'X-Content-Type-Options':'nosniff',
-        'Cache-Control': 'no-cache, no-store, must-revalidate',
-        'Pragma':'no-cache'
-        });
+    // res.set({
+    //     'X-Content-Type-Options':'nosniff',
+    //     'Cache-Control': 'no-cache, no-store, must-revalidate',
+    //     'Pragma':'no-cache'
+    //     });
     if(err){
         return res.status(400).send();
     }
