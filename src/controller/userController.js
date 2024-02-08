@@ -6,9 +6,7 @@ const{verifyBasicAuth} = require('../middleware/authenticate');
 
 const createUser = async(req,res)=>{
     try{
-        if(req.query){
-            res.status(400).send();
-           }
+       
         const userExists = await User.findOne({where:{emailId:req?.body?.emailId}});
         if(userExists){
             res.status(400).send();
@@ -37,9 +35,7 @@ const createUser = async(req,res)=>{
 
 const updateUser = async(req,res)=>{
     try{
-        if(req.query){
-            res.status(400).send();
-           }
+       
         //handle empty body
         if(!req.headers){
             res.status(401).send();
@@ -83,9 +79,7 @@ const updateUser = async(req,res)=>{
 //add body validation
 const getUser = async(req,res)=>{
     try{
-        if(req.query){
-            res.status(400).send();
-           }
+       
         if(!req.headers){
             res.status(401).send();
         }

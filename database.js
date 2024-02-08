@@ -1,26 +1,24 @@
-// const dbConfig = require(db.config);
-
-// const Sequelize = require("sequelize");
-// const sequelize = new Sequelize(dbCofig.DB, dbConfig.USER,
-// dbConfig.PASSWORD, {
-// 	host: dbConfig.HOST,
-// 	dialect: dbConfig.dialect,
-// 	operationsAliases: false,
-	
-// });
-// const db = {};
-
-// db.Sequelize = Sequelize;
-// db.sequelize = sequelize;
-
-// // db.tutorials = require(“./tutorial.model.js”) (sequelize, Sequelize);
-
-// // module.exports = db;
-// // The user should not forget to summon the sync() method in the server.js.
-// // const app = express();
-// // app.use(....);
-
-// // const db = require(“./app/models”);
-// db.sequelize.sync();
-// enfienfienfienf
-// enfkenfikn
+const mysql = require("mysql2");
+const dbConfig = require("./src/config/db.config")
+// Open the connection to MySQL server
+const createDb = async()=>{
+    const connection = mysql.createConnection({
+        host: dbConfig.HOST,
+        user: dbConfig.USER,
+        password: dbConfig.PASSWORD,
+      });
+      
+      // Run create database statement
+      connection.query(
+        `CREATE DATABASE IF NOT EXISTS demoDb`,
+        function (err, results) {
+          console.log(results);
+          console.log(err);
+        }
+      );
+      
+      // Close the connection
+      connection.end();
+      
+}
+module.exports = {createDb}
