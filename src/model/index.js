@@ -3,14 +3,14 @@ const mysql = require('mysql2/promise');
 const {Sequelize,DataTypes} = require('sequelize');
 
 
-initialize();
+// initialize();
 
-async function initialize() {
-    // create db if it doesn't already exist
+// async function initialize() {
+//     // create db if it doesn't already exist
    
-    const connection = await mysql.createConnection({user:dbConfig.USER,password:dbConfig.PASSWORD,host:dbConfig.HOST,port:'3306'} );
-    await connection.query(`CREATE DATABASE IF NOT EXISTS \`${dbConfig.DB}\`;`);
-}
+//     const connection = await mysql.createConnection({user:dbConfig.USER,password:dbConfig.PASSWORD,host:dbConfig.HOST,port:'3306'} );
+//     await connection.query(`CREATE DATABASE IF NOT EXISTS \`${dbConfig.DB}\`;`);
+// }
    
         // (await mysql.createConnection({
         //     user     : dbConfig.USER,

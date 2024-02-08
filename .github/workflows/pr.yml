@@ -25,7 +25,5 @@ jobs:
      
       - name: Check if server runs
         run: echo "Listening on port 3000"
-      - name: Failed test
-        run: exit 1
-
+      
      
