@@ -1,7 +1,9 @@
 const {db,connectDb} = require('../model/index');
 
 const gethealthCheck = async(req,res)=>{
-   
+   if(req.query){
+    res.status(400).send();
+   }
     res.set({
         'X-Content-Type-Options':'nosniff',
         'Cache-Control': 'no-cache, no-store, must-revalidate',
