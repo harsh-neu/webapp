@@ -26,7 +26,7 @@ describe("test_user_apis" , ()=>{
 
     beforeAll(async()=>{
         await db.sequelize.sync({force:false});
-        async () => {await new Promise((resolve) => setTimeout(resolve, 4000));}
+        
 
    });
     it("should create user in the db, and return proper values", async()=>{
