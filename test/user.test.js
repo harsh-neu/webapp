@@ -11,7 +11,7 @@ const dbUser = process.env.USER_NAME || "harsh"
 const  dbPassword = process.env.PASSWORD || "harsh" 
 const port = process.env.port || 3306
 
-const sequelize = new Sequelize(db,dbUser,dbPassword,{
+const sequelize =  new Sequelize(db,dbUser,dbPassword,{
     dialect :'mysql',
     logging: false
 })
@@ -24,7 +24,7 @@ const user = {
 describe("test_user_apis" , ()=>{
 
     beforeAll(async()=>{
-        sequelize.sync({force:false});
+       await sequelize.sync({force:false});
 
     });
    
