@@ -24,7 +24,12 @@ jobs:
       - name: Start MySQL
         run: |
           sudo /etc/init.d/mysql start
-          mysql -e "CREATE DATABASE IF NOT EXISTS demoDb;" -u root -p harsh
+      - name: Create DB    
+        run:  mysql -e "CREATE DATABASE IF NOT EXISTS $DB_DATABASE;" -u$DB_USER -p$DB_PASSWORD
+        env: 
+          DB_DATABASE: demoDb
+          DB_USER: root
+          DB_PASSWORD: harsh
       - name: Run tests
         run: npm test
         env: 
