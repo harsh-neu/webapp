@@ -34,8 +34,8 @@ jobs:
         run: npm test
         env: 
             DB: demoDb
-            dbUser: harsh
-            dbPassword: harsh
+            USER_NAME: harsh
+            PASSWORD: harsh
             port: 3306
       
      
