@@ -72,9 +72,9 @@ const updateUser = async(req,res)=>{
         user[key] = req.body[key];
        }
        console.log(user);
-       const response = await User.update(user,{where:{emailId:"harsh1@gmail.com"}});
+       const response = await User.update(user,{where:{emailId: clientCredentials.emailId}});
        console.log(response);
-       res.status(200).send();
+       res.status(204).send();
     }
     catch(err){
         console.log(err);
