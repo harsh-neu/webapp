@@ -32,5 +32,10 @@ jobs:
         run: npm install
       - name: Run tests
         run: npm test
+        env: 
+            DB: demoDb
+            dbUser: harsh
+            dbPassword: harsh
+            port: 3000
       
      
