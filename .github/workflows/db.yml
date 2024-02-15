@@ -25,13 +25,13 @@ jobs:
         run: |
           sudo /etc/init.d/mysql start
       - name: Connect to MySQL
-        run:  mysql --user=root --password=root
+        run:  mysql --user=-u$DB_USER --password=$DB_PASSWORD
       - name: Create DB    
         run:  mysql -e "CREATE DATABASE IF NOT EXISTS $DB_DATABASE;" -u$DB_USER -p$DB_PASSWORD
         env: 
-          DB_DATABASE: demoDb
-          DB_USER: root
-          DB_PASSWORD: root
+          DB_DATABASE: ${{ secrets.DB_DATABASE }}
+          DB_USER: ${{secrets.DB_USER}}
+          DB_PASSWORD: ${{secrets.DB_PASSWORD}}
       - name: Run tests
         run: npm test
         env: 
