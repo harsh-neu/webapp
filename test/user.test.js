@@ -24,10 +24,11 @@ const user = {
 describe("test_user_apis" , ()=>{
 
     beforeAll(async()=>{
+        await sequelize.sync({force:false});
+
         async () => {await new Promise((resolve) => setTimeout(resolve, 4000));}
 
-       await sequelize.sync({force:false});
-
+      
     });
    
     it("should create user in the db, and return proper values", async()=>{
