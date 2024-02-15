@@ -24,7 +24,7 @@ jobs:
       - name: Start MySQL
         run: |
           sudo /etc/init.d/mysql start
-          mysql -e "CREATE DATABASE IF NOT EXISTS demoDb;" -uroot -pharsh
+          mysql -e "CREATE DATABASE IF NOT EXISTS demoDb;" -u root -p harsh
       - name: Run tests
         run: npm test
         env: 
