@@ -7,8 +7,8 @@ const Sequelize = require("sequelize");
 
 
 const db = process.env.DB || 'demoDb'
-const dbUser = process.env.USER_NAME || "root"
-const  dbPassword = process.env.PASSWORD || "Chocoslam" 
+const dbUser = process.env.USER_NAME || "harsh"
+const  dbPassword = process.env.PASSWORD || "harsh" 
 const port = process.env.port || 3000
 
 const sequelize = new Sequelize(db,dbUser,dbPassword,{
