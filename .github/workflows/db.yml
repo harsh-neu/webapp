@@ -37,5 +37,6 @@ jobs:
             USER_NAME: harsh
             DB_PASSWORD: harsh
             PORT: 3000
+            HOST: DATABASE_ENDPOINT
       
      
