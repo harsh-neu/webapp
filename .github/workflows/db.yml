@@ -36,6 +36,6 @@ jobs:
             DB: demoDb
             dbUser: harsh
             dbPassword: harsh
-            port: 3000
+            port: 3306
       
      
