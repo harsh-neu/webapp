@@ -12,9 +12,9 @@ const user = {
 }
 describe("test_user_apis" , ()=>{
 
-    // beforeAll(async()=>{
-    //     db.sequelize.sync({force:false});
-    // });
+    beforeAll(async()=>{
+        db.sequelize.sync({force:false});
+    });
     it("should create user in the db, and return proper values", async()=>{
     
          const user1 = await superTest(app)
@@ -38,16 +38,16 @@ describe("test_user_apis" , ()=>{
 
 describe("test_update_apis" , ()=>{
 
-    // beforeAll(async()=>{
-    //     db.sequelize.sync({force:false});
-    // });
+    beforeAll(async()=>{
+        await db.sequelize.sync({force:false});
+    });
     it("should update user in the db, and return proper values", async()=>{
         const firstName = "xyz";
          const user1 = await superTest(app)
         .put('/v1/user/self')
         .set("Authorization", "basic " +  Buffer(`${user.emailId}:${user.password}`).toString("base64"))
         .send({firstName})
-        .expect(200)
+        .expect(204)
         
     })
 
