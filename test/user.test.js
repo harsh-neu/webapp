@@ -24,6 +24,8 @@ const user = {
 describe("test_user_apis" , ()=>{
 
     beforeAll(async()=>{
+        async () => {await new Promise((resolve) => setTimeout(resolve, 4000));}
+
        await sequelize.sync({force:false});
 
     });
