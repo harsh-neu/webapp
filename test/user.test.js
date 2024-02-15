@@ -1,9 +1,20 @@
 const superTest = require('supertest');
 const app = require('../app');
-const {db,connectDb} = require('../src/model');
+// const {db,connectDb} = require('../src/model');
 const { faker } = require('@faker-js/faker');
+require('dotenv').config();
+const Sequelize = require("sequelize");
 
 
+const db = process.env.DB || 'demoDb'
+const dbUser = process.env.USER_NAME || "root"
+const  dbPassword = process.env.PASSWORD || "Chocoslam" 
+const port = process.env.port || 3000
+
+const sequelize = new Sequelize(db,dbUser,dbPassword,{
+    dialect :'mysql',
+    logging: false
+})
 const user = {
     firstName :faker.person.firstName(),
     lastName : faker.person.lastName(),
@@ -13,8 +24,10 @@ const user = {
 describe("test_user_apis" , ()=>{
 
     beforeAll(async()=>{
-        db.sequelize.sync({force:false});
+        sequelize.sync({force:false});
+
     });
+   
     it("should create user in the db, and return proper values", async()=>{
     
          const user1 = await superTest(app)
@@ -39,8 +52,11 @@ describe("test_user_apis" , ()=>{
 describe("test_update_apis" , ()=>{
 
     beforeAll(async()=>{
-        await db.sequelize.sync({force:false});
+         sequelize.sync({force:false});
     });
+    afterAll(async() => {
+        await sequelize.close();
+    })
     it("should update user in the db, and return proper values", async()=>{
         const firstName = "xyz";
          const user1 = await superTest(app)
