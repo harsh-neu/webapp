@@ -1,5 +1,5 @@
 const superTest = require('supertest');
-const app = require('../app');
+const {server,app} = require('../app');
 // const {db,connectDb} = require('../src/model');
 const { faker } = require('@faker-js/faker');
 require('dotenv').config();
@@ -55,7 +55,8 @@ describe("test_update_apis" , ()=>{
          sequelize.sync({force:false});
     });
     afterAll(async() => {
-        await sequelize.close();
+       
+         server.close();
     })
     it("should update user in the db, and return proper values", async()=>{
         const firstName = "xyz";
