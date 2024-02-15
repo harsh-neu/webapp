@@ -9,7 +9,7 @@ const Sequelize = require("sequelize");
 const db = process.env.DB || 'demoDb'
 const dbUser = process.env.USER_NAME || "harsh"
 const  dbPassword = process.env.PASSWORD || "harsh" 
-const port = process.env.port || 3000
+const port = process.env.port || 3306
 
 const sequelize = new Sequelize(db,dbUser,dbPassword,{
     dialect :'mysql',
