@@ -28,8 +28,8 @@ app.all('*', function(req, res){
     res.status(404).send();
   });
 const PORT = process.env.PORT||3000;
-app.listen(PORT,()=>{
+const server = app.listen(PORT,()=>{
     console.log(`Server is listening on port ${PORT}`);
 })
 
-module.exports = app
+module.exports = {app,server}

@@ -20,7 +20,7 @@ jobs:
           MYSQL_PASSWORD: harsh
           options: --health-cmd="mysqladmin ping" --health-interval=10s --health-timeout=5s --health-retries=3     
       ports:
-          - 3306:3306
+          - 4000:4000
     steps:
       - name: Check out repository code
         uses: actions/checkout@v4
@@ -36,6 +36,6 @@ jobs:
             DB: demoDb
             USER_NAME: harsh
             PASSWORD: harsh
-            port: 3306
+            port: 4000
       
      
