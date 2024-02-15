@@ -24,6 +24,9 @@ const user = {
 }
 describe("test_user_apis" , ()=>{
 
+    beforeAll(async()=>{
+        db.sequelize.sync({force:false});
+   });
     it("should create user in the db, and return proper values", async()=>{
     
          const user1 = await superTest(app)
