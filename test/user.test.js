@@ -25,7 +25,7 @@ const user = {
 describe("test_user_apis" , ()=>{
 
     beforeAll(async()=>{
-        db.sequelize.sync({force:false});
+        await db.sequelize.sync({force:false});
         async () => {await new Promise((resolve) => setTimeout(resolve, 4000));}
 
    });
@@ -53,7 +53,7 @@ describe("test_user_apis" , ()=>{
 describe("test_update_apis" , ()=>{
 
     beforeAll(async()=>{
-         db.sequelize.sync({force:false});
+         await db.sequelize.sync({force:false});
     });
     afterAll(async() => {
        
