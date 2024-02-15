@@ -16,7 +16,6 @@ jobs:
       image: mysql:5.7
       env:
           MYSQL_DATABASE: demoDb
-          MYSQL_USER: harsh
           MYSQL_ROOT_PASSWORD: harsh
           options: --health-cmd="mysqladmin ping" --health-interval=10s --health-timeout=5s --health-retries=3     
       ports:
