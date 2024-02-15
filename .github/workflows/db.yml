@@ -11,15 +11,7 @@ jobs:
     # Docker Hub image that `container-job` executes in
     
     # Service containers to run with `container-job`
-    services: 
-     mysql: 
-      image: mysql:5.7
-      env:
-          MYSQL_DATABASE: demoDb
-          MYSQL_ROOT_PASSWORD: harsh
-          options: --health-cmd="mysqladmin ping" --health-interval=10s --health-timeout=5s --health-retries=3     
-      ports:
-          - 3306:3306
+    
     steps:
       - name: Check out repository code
         uses: actions/checkout@v4
@@ -29,12 +21,23 @@ jobs:
           node-version: '14.x'
       - name: Install dependencies
         run: npm install
+      - name: Start MySQL
+        run: |
+          sudo /etc/init.d/mysql start
+      - name: Connect to MySQL
+        run:  mysql --user=root --password=root
+      - name: Create DB    
+        run:  mysql -e "CREATE DATABASE IF NOT EXISTS $DB_DATABASE;" -u$DB_USER -p$DB_PASSWORD
+        env: 
+          DB_DATABASE: demoDb
+          DB_USER: root
+          DB_PASSWORD: root
       - name: Run tests
         run: npm test
         env: 
             DB: demoDb
             USER_NAME: root
-            DB_PASSWORD: harsh
+            DB_PASSWORD: root
             PORT: 3000
             HOST: localhost
       
