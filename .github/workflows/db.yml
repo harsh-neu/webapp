@@ -25,9 +25,9 @@ jobs:
         run: |
           sudo /etc/init.d/mysql start
       - name: Connect to MySQL
-        run:  mysql --user=$DB_USER --password=$DB_PASSWORD}
+        run:  mysql --user=$DB_USER --password=$DB_PASSWORD
       - name: Create DB    
-        run:  mysql -e "CREATE DATABASE IF NOT EXISTS $DB_DATABASE;" -u$DB_USER -p${DB_PASSWORD:}
+        run:  mysql -e "CREATE DATABASE IF NOT EXISTS $DB_DATABASE;" -u$DB_USER -p$DB_PASSWORD
         env: 
           DB_DATABASE: demoDb
           DB_USER: root
