@@ -33,9 +33,9 @@ jobs:
         run: npm test
         env: 
             DB: demoDb
-            USER_NAME: harsh
+            USER_NAME: root
             DB_PASSWORD: harsh
             PORT: 3000
-            HOST: DATABASE_ENDPOINT
+            HOST: localhost
       
      
