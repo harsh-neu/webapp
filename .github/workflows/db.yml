@@ -16,11 +16,11 @@ jobs:
       image: mysql:5.7
       env:
           MYSQL_DATABASE: demoDb
-          MYSQL_USER: harsh
+         
           MYSQL_PASSWORD: harsh
           options: --health-cmd="mysqladmin ping" --health-interval=10s --health-timeout=5s --health-retries=3     
       ports:
-          - 4000:4000
+          - 3306:3306
     steps:
       - name: Check out repository code
         uses: actions/checkout@v4
@@ -36,6 +36,6 @@ jobs:
             DB: demoDb
             USER_NAME: harsh
             PASSWORD: harsh
-            port: 4000
+            port: 3306
       
      
