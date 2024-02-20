@@ -65,7 +65,7 @@ describe("test_update_apis" , ()=>{
         .put('/v1/user/self')
         .set("Authorization", "basic " +  Buffer(`${user.emailId}:${user.password}`).toString("base64"))
         .send({firstName})
-        .expect(204)
+        .expect(200)
         
     })
 
