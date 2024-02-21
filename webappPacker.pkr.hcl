@@ -31,6 +31,11 @@ build {
   sources = [
     "sources.googlecompute.csye6225-custom-image",
   ]
+
+  provisioner "file" {
+    source      = "./webapp.zip"
+    destination = "/tmp/"
+  }
   provisioner "shell" {
     script = "setup.sh"
   }
