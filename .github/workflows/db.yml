@@ -30,7 +30,7 @@ jobs:
         run:  mysql -e "CREATE DATABASE IF NOT EXISTS $DB_DATABASE;" -u $DB_USER -p$DB_PASSWORD
         env: 
           DB_DATABASE: demoDb
-          DB_USER: ${{ secrets.USER }}
+          DB_USER: ${{ secrets.DB_USER }}
           DB_PASSWORD: ${{ secrets.DB_PASSWORD }}
       - name: Run tests
         run: npm test
