@@ -11,5 +11,64 @@ jobs:
     steps:
       - name: Check out repository code
         uses: actions/checkout@v4
+
+      - name: Node.js setup
+        uses: actions/setup-node@v2
+        with:
+          node-version: '14.x'
+    
+      - name: Start MySQL
+        run: |
+          sudo /etc/init.d/mysql start
+      - name: Connect to MySQL
+        run:  mysql --user=root --password=root
+      - name: Create DB    
+        run:  mysql -e "CREATE DATABASE IF NOT EXISTS $DB_DATABASE;" -u$DB_USER -p$DB_PASSWORD
+        env: 
+          DB_DATABASE: demoDb
+          DB_USER: ${{ secrets.USER }}
+          DB_PASSWORD: ${{ secrets.DB_PASSWORD }}
+
       - name: Zip webapp
-        run:  
+        run:  |
+          rm -r webapp.zip
+          zip -r webapp.zip . -x   ".git/*" ".github/*"
+
+      - name: Install dependencies
+        run: npm install
+
+      - name: Run tests
+        run: npm test
+        env: 
+            DB: demoDb
+            USER_NAME: ${{ secrets.USER }}
+            DB_PASSWORD: ${{ secrets.DB_PASSWORD }}
+            PORT: ${{ secrets.PORT }}
+            HOST: ${{ secrets.HOST }}
+
+      - name: Authenticate gcloud
+        id: auth 
+        uses: google-github-actions/auth@v2
+        with:
+          credentials_json: '${{ secrets.service_account_json}}'
+      - name: Setup gcloud 
+        uses: google-github-actions/setup-gcloud@v2
+      - name: gcloud CLI
+        run: gcloud info
+      - name: Initialize Packer
+        id: init
+        if: success()
+        run: packer init webappPacker.pkr.hcl
+      - name: Format pkr
+        id: fmt
+        if: success()
+        run: packer fmt webappPacker.pkr.hcl
+      - name: Validate Packer
+        if: success()
+        #add db/packer vars here
+        run: packer validate webappPacker.pkr.hcl
+      - name: Build Packer
+        if: success()
+        run: packer build webappPacker.pkr.hcl
+    
+  
