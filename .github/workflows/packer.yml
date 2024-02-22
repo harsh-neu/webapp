@@ -1,12 +1,13 @@
 name: Workflow for DB 
 on:
   pull_request:
-    branches: [main]
+    types:
+      - closed
 
 jobs:
-  # Label of the container job
-  pr-review:
-    # Containers must run in Linux based operating systems
+  after_merge:
+    if: github.event.pull_request.merged == true
+   
     runs-on: ubuntu-latest
     steps:
       - name: Check out repository code
