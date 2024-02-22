@@ -1,0 +1,15 @@
+name: Workflow for DB 
+on:
+  pull_request:
+    branches: [main]
+
+jobs:
+  # Label of the container job
+  pr-review:
+    # Containers must run in Linux based operating systems
+    runs-on: ubuntu-latest
+    steps:
+      - name: Check out repository code
+        uses: actions/checkout@v4
+      - name: Zip webapp
+        run:  

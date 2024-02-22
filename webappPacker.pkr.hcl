@@ -37,6 +37,6 @@ build {
     destination = "/tmp/"
   }
   provisioner "shell" {
-    script = "setup.sh"
+    scripts = ["setup.sh","systemd.sh",]
   }
 }
