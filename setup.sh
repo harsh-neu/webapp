@@ -5,10 +5,10 @@ sudo systemctl start mysqld
 sudo systemctl enable mysqld
 
 sudo mysql -u root -e "ALTER USER 'root'@'localhost' IDENTIFIED WITH mysql_native_password BY 'Chocoslam'";
-sudo mysql -u root -p Chocoslam -e "FLUSH PRIVILEGES";
+sudo mysql -u root -pChocoslam -e "FLUSH PRIVILEGES";
 echo "create db"
 sudo systemctl restart mysqld
-sudo mysql -u root -p Chocoslam -e "CREATE DATABASE demoDb;"
+sudo mysql -u root -pChocoslam -e "CREATE DATABASE demoDb;"
 echo "create users"
 sudo groupadd csye6225
 sudo useradd -M -s /usr/sbin/nologin -g csye6225 csye6225
