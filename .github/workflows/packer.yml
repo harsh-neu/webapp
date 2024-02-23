@@ -21,6 +21,10 @@ jobs:
       - name: Start MySQL
         run: |
           sudo /etc/init.d/mysql start
+      - name: Debug Secrets
+        run: |
+          echo "Git User: ${{ secrets.GIT_USER }}"
+          echo "DB Password: ${{ secrets.DB_PASSWORD }}"
       - name: Connect to MySQL
         run:  mysql --user=${{ secrets.GIT_USER}} --password="${{ secrets.DB_PASSWORD }}"
       - name: Create DB    
