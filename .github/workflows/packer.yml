@@ -26,13 +26,13 @@ jobs:
           echo "Git User: ${{ secrets.GIT_USER }}"
           echo "DB Password: ${{ secrets.DB_PASSWORD }}"
       - name: Connect to MySQL
-        run:  mysql --user=root --password=root
+        run:  mysql --user=root --password=Chocoslam
       - name: Create DB    
         run:  mysql -e "CREATE DATABASE IF NOT EXISTS $DB_DATABASE;" -u $DB_USER -p$DB_PASSWORD
         env: 
           DB_DATABASE: demoDb
           DB_USER: root
-          DB_PASSWORD: root
+          DB_PASSWORD: Chocoslam
 
       - name: Zip webapp
         run:  |
