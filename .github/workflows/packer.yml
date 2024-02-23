@@ -22,12 +22,12 @@ jobs:
         run: |
           sudo /etc/init.d/mysql start
       - name: Connect to MySQL
-        run:  mysql --user=${{ secrets.DB_USER}} --password=${{ secrets.DB_PASSWORD }}
+        run:  mysql --user=${{ secrets.GIT_USER}} --password=${{ secrets.DB_PASSWORD }}
       - name: Create DB    
         run:  mysql -e "CREATE DATABASE IF NOT EXISTS $DB_DATABASE;" -u $DB_USER -p$DB_PASSWORD
         env: 
           DB_DATABASE: demoDb
-          DB_USER: ${{ secrets.USER }}
+          DB_USER: ${{ secrets.GIT_USER }}
           DB_PASSWORD: ${{ secrets.DB_PASSWORD }}
 
       - name: Zip webapp
@@ -42,7 +42,7 @@ jobs:
         run: npm test
         env: 
             DB: demoDb
-            USER_NAME: ${{ secrets.USER }}
+            USER_NAME: ${{ secrets.GIT_USER }}
             DB_PASSWORD: ${{ secrets.DB_PASSWORD }}
             PORT: ${{ secrets.PORT }}
             HOST: ${{ secrets.HOST }}
