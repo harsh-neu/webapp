@@ -52,6 +52,14 @@ variable "ssh_username" {
   description = "The username for SSH access"
   default     = "packer"
 }
+packer {
+  required_plugins {
+    googlecompute = {
+      source  = "github.com/hashicorp/googlecompute"
+      version = ">= 1.1.3"
+    }
+  }
+}
 
 source "googlecompute" "csye6225-custom-image" {
   project_id              = var.project_id
