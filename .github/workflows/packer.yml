@@ -49,8 +49,6 @@ jobs:
             DB_PASSWORD: root
             PORT: 3000
             HOST: localhost
-      - name: Print gcp secrets
-        run: "${{ secrets.SERVICE_ACCOUNT_JSON}}"
       - name: Authenticate gcloud
         id: auth 
         uses: google-github-actions/auth@v2
