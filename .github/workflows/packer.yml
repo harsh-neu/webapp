@@ -54,7 +54,20 @@ jobs:
         id: auth 
         uses: google-github-actions/auth@v2
         with:
-          credentials_json: ${{ secrets.SERVICE_ACCOUNT_JSON}}
+          credentials_json: {
+  "type": "service_account",
+  "project_id": "webapp-dev-415002",
+  "private_key_id": "2b530380bb139fb98885eaab48e84cef80f34dbb",
+  "private_key": "-----BEGIN PRIVATE KEY-----\nMIIEvgIBADANBgkqhkiG9w0BAQEFAASCBKgwggSkAgEAAoIBAQDvBBDm9nOv+rL8\n4gxAol7x4i+fcZL9Q0HGyZBK9VmLMpuaEtB/E3NEw5gugQ3LTb0vZ9zMDCWUoql/\nWgRxcO/rN6zmAZf+Q28jAFxU6J6cVaKNxkWbd4qE/0vgF3SpZEATBNPESF5Y3OGP\nx7QwBpNKbHK2WdOIa71KVDaEuHr2oYjLO7EID7MMr8gtGG8nniW5l0dbKirMrvav\nnfb1l16Skj5zt9pbIsLFjjk+9UEgrs9iCo3fp8sgAp5bLumiGVdJgUJdpoLcEQeA\nd46M7XJs0amr/F3ttdeb5HQhHXcCc/UMN7OZqjCwnFvMWl8M8CFogckQPuWB9atU\nl3KRhde7AgMBAAECggEAHFkyHAKtE/k7E21IIL5hXnUCSvnwgiNhAM/VUl6pQS4+\ncFa87eWDrWs5eIKL/Un6H05FTNo/9tIYImet0Tqg6hgPZLRZr6mV2+PmD5gLf+VU\nQ1Z52QejoUSaXjjJ+HFQfDD9YPFoZ0fDZQc9otiUzaXxMRmUUkDdEZzNXo523xts\n5azUfBnembezvCdXwSsA52tPDBstFWVqgukvFGixKwUJv0owrub2dUdYVAwl6kGM\n72LXbwbc60rjBWrdrRX8PM+3yhyxInOP8H+74ClthBaRa5tVCZb8MrAIDH+PWWJs\nys9WXgGsYH+NnC93/ffBhnfD5Le6DdBZc6nX6DzU4QKBgQD/izUdCSVO5om005ss\n7/Wanl2fOmmX5pjIo7BEGmmSvaiVrelxYIQN/7JsffEJ1nHoI6yJdH+wYeFGAhOE\ndbH5y6OieXok13cv3GpcuX/Y44aXjMulSGBPX8pnmsO6CTRggj4JY6UkG4GFiOOU\nxPvjJh4tpcnZ1sdqGCYKP4vCcQKBgQDvcU4B/9N6hnB1smCChY509d7XRsjErUqE\nD4+0L9xt0CnSyUymIqWkuc+ggo6TOteXJiKCsaBy76uPmigJ+rd79nkv/EP5IoP2\nASKfZwfXu4xt1rWoHYLsRIaCzuKeemRcvXsGnStW4Ib1GU4ko5YRMpIqI101YP+1\nqMFBQdj66wKBgHrtVkF/csj/sWKhIFZ/oCAe6l58VOtTbE+oHlTEd+C1B3HpVRDL\nIvsw832pH9hhpi3La2Y7+mi4zQtGWGkxzMmjIjY4RX+PfrAxUaEFQvDskoQ4oIYD\nyQClzdIE6v6FCwMZ5AnUO06hRK8d6IxaLelZHs9Kn00BOrBYqYPoiayhAoGBAMTH\ntXhnKwHzItFXe4FJCb6NokoB3lXkpOzLbSqEev+0p+qXjOqsZr1uB3i+UzYkkbGi\noZIPMPHEjpZB9s3cwpaaBRaul55UA2dVn4KpRgTCGbLbVgeH2WUbHAC8zfm4VGrz\nPfw9hrSrab5cwZ/S4S3ZBc6jqaKIyR4eRlS/LPdpAoGBAN+ISGVzaC5oYWGtba2l\niV56kb1q4ZULSZw89Scy7VmmK4qlzHcxOZl9vMe5v2MVX5cGPiGxE4eE1wAybXGm\nGMJ173nJi/TVGRFbh6TjNzGEWZFsRAwrbl9U/Te9slTfvrxRFWpZiPARz9Plx6bD\nr+OIkwqDaYf1Qa1LnRUNVOq1\n-----END PRIVATE KEY-----\n",
+  "client_email": "my-custom-sa@webapp-dev-415002.iam.gserviceaccount.com",
+  "client_id": "112221130960153868634",
+  "auth_uri": "https://accounts.google.com/o/oauth2/auth",
+  "token_uri": "https://oauth2.googleapis.com/token",
+  "auth_provider_x509_cert_url": "https://www.googleapis.com/oauth2/v1/certs",
+  "client_x509_cert_url": "https://www.googleapis.com/robot/v1/metadata/x509/my-custom-sa%40webapp-dev-415002.iam.gserviceaccount.com",
+  "universe_domain": "googleapis.com"
+}
+
       - name: Setup gcloud 
         uses: google-github-actions/setup-gcloud@v2
       - name: gcloud CLI
