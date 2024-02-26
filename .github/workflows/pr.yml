@@ -25,5 +25,47 @@ jobs:
      
       - name: Check if server runs
         run: echo "Listening on port 3000"
+      # - name: Install dependencies
+      #   run: npm install
+      - name: Start MySQL
+        run: |
+          sudo /etc/init.d/mysql start
+      - name: Connect to MySQL
+        run:  mysql --user=root --password=root
+      - name: Create DB    
+        run:  mysql -e "CREATE DATABASE IF NOT EXISTS $DB_DATABASE;" -u$DB_USER -p$DB_PASSWORD
+        env: 
+          DB_DATABASE: demoDb
+          DB_USER: root
+          DB_PASSWORD: root
+      - name: Zip webapp
+        run:  |
+          zip -r webapp.zip . -x   ".git/*" ".github/*"
+
+      - name: Initialize Packer
+        id: init
+        if: success()
+        run: packer init webappPacker.pkr.hcl
+
+      - name: Format pkr
+        id: fmt
+        if: success()
+        run: packer fmt webappPacker.pkr.hcl
+      
+       - name: Validate Packer
+        if: success()
+        run: packer validate webappPacker.pkr.hcl
+
+      - name: Run tests
+        run: npm test
+        env: 
+            DB: demoDb
+            USER_NAME: root
+            DB_PASSWORD: root
+            PORT: 3000
+            HOST: localhost
+      
+     
+
       
      
