@@ -1,7 +1,7 @@
 const {db} = require('../model');
 const {validateObject} = require('../util/util')
 const User = db.users;
-const bcrypt = require("bcrypt");
+const bcrypt = require("bcryptjs");
 const{verifyBasicAuth} = require('../middleware/authenticate');
 
 const createUser = async(req,res)=>{

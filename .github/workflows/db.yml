@@ -32,6 +32,24 @@ jobs:
           DB_DATABASE: demoDb
           DB_USER: root
           DB_PASSWORD: root
+      - name: Zip webapp
+        run:  |
+          zip -r webapp.zip . -x   ".git/*" ".github/*"
+
+      - name: Initialize Packer
+        id: init
+        if: success()
+        run: packer init webappPacker.pkr.hcl
+
+      - name: Format pkr
+        id: fmt
+        if: success()
+        run: packer fmt webappPacker.pkr.hcl
+      
+       - name: Validate Packer
+        if: success()
+        run: packer validate webappPacker.pkr.hcl
+
       - name: Run tests
         run: npm test
         env: 
