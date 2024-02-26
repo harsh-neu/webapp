@@ -58,6 +58,17 @@ jobs:
         uses: google-github-actions/setup-gcloud@v2
       - name: gcloud CLI
         run: gcloud info
+      - name: Initialize Packer
+        id: init
+        if: success()
+        run: packer init webappPacker.pkr.hcl
+      - name: Format pkr
+        id: fmt
+        if: success()
+        run: packer fmt webappPacker.pkr.hcl
+      - name: Validate Packer
+        if: success()
+        run: packer validate webappPacker.pkr.hcl
       - name: Build Packer
         if: success()
         run: packer build webappPacker.pkr.hcl
