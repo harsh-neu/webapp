@@ -5,7 +5,7 @@ on:
 
 jobs:
   # Label of the container job
-  pr-review:
+  config-review:
     # Containers must run in Linux based operating systems
     runs-on: ubuntu-latest
     # Docker Hub image that `container-job` executes in
