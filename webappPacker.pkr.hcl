@@ -73,7 +73,7 @@ source "googlecompute" "csye6225-custom-image" {
   image_project_id        = var.image_project_id
   image_storage_locations = var.image_storage_locations
   ssh_username            = var.ssh_username
-}
+
 
 build {
   sources = [
