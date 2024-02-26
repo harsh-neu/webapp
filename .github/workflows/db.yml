@@ -4,14 +4,8 @@ on:
     branches: [main]
 
 jobs:
-  # Label of the container job
   pr-review:
-    # Containers must run in Linux based operating systems
     runs-on: ubuntu-latest
-    # Docker Hub image that `container-job` executes in
-    
-    # Service containers to run with `container-job`
-    
     steps:
       - name: Check out repository code
         uses: actions/checkout@v4
@@ -46,7 +40,7 @@ jobs:
         if: success()
         run: packer fmt webappPacker.pkr.hcl
       
-       - name: Validate Packer
+      - name: Validate Packer
         if: success()
         run: packer validate webappPacker.pkr.hcl
 
