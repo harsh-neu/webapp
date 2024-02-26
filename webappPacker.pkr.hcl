@@ -6,7 +6,7 @@ variable "project_id" {
 variable "source_image_family" {
   description = "The family of the source image to use for building the custom image"
   default     = "centos-stream-8"
-}
+
 
 variable "zone" {
   description = "The zone in which to build the image"
