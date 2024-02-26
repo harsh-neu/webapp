@@ -21,7 +21,7 @@ echo "change ownership"
 
 sudo chown -R "csye6225:csye6225"  "/opt"
 ls -l /tmp
-sudo unzip "/tmp/webapp.zip" -d  "/opt/"
+sudo unzip "/tmp/webapp.zip" -d  "/opt/webapp"
 ls -l "/opt"
 cd /opt/webapp
 sudo npm install
