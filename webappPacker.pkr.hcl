@@ -1,6 +1,6 @@
 variable "project_id" {
   description = "The ID of the Google Cloud project"
-  default     = "webapp-dev-415002"
+  default     = "webapp-develop-415501"
 }
 
 variable "source_image_family" {
@@ -40,7 +40,7 @@ variable "image_family" {
 
 variable "image_project_id" {
   description = "The ID of the project where the custom image will be stored"
-  default     = "webapp-dev-415002"
+  default     = "webapp-develop-415501"
 }
 
 variable "image_storage_locations" {
