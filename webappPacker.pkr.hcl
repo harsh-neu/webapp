@@ -31,7 +31,7 @@ variable "image_name" {
 variable "image_description" {
   description = "The description for the custom image"
   default     = "Image created from csye6225-{{timestamp}}"
-}
+
 
 variable "image_family" {
   description = "The family name for the custom image"
