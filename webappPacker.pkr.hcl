@@ -26,7 +26,7 @@ variable "disk_type" {
 variable "image_name" {
   description = "The name to assign to the custom image"
   default     = "csye6225-{{timestamp}}"
-}
+
 
 variable "image_description" {
   description = "The description for the custom image"
