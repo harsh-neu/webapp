@@ -1,6 +1,6 @@
 [Unit] 
 Description=js server for CSYE-6225 
-After=network.target 
+After=network.target google-startup-scripts.service
 [Service] 
 Type=simple 
 User=csye6225 
