@@ -1,8 +1,8 @@
 #! /bin/bash
 # echo "in setup"
-# sudo yum install -y mysql-server
-# sudo systemctl start mysqld
-# sudo systemctl enable mysqld
+sudo yum install -y mysql-server
+ sudo systemctl start mysqld
+ sudo systemctl enable mysqld
 
 # sudo mysql -u root -e "ALTER USER 'root'@'localhost' IDENTIFIED WITH mysql_native_password BY 'Chocoslam'";
 # sudo mysql -u root -pChocoslam -e "FLUSH PRIVILEGES";
