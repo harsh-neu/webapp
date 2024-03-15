@@ -29,6 +29,8 @@ const createUser = async(req,res)=>{
             emailId:response.emailId,
             firstName:response?.firstName,
             lastName:response?.lastName,
+            createdAt: response?.createdAt,
+            updatedAt: response?.updatedAt
         });
     }catch(err){
         console.log(err);
@@ -71,7 +73,10 @@ const updateUser = async(req,res)=>{
        for(key in req.body){
         user[key] = req.body[key];
        }
-       console.log(user);
+       if (user?.password) {
+        const salt = bcrypt.genSaltSync(10, 'a');
+        user.password = bcrypt.hashSync(user?.password, salt);
+    }
        const response = await User.update(user,{where:{emailId: clientCredentials.emailId}});
        console.log(response);
        res.status(204).send();
@@ -113,6 +118,8 @@ const getUser = async(req,res)=>{
             emailId:authenticatedUser.emailId,
             firstName:authenticatedUser?.firstName,
             lastName:authenticatedUser?.lastName,
+            createdAt: authenticatedUser?.createdAt,
+            updatedAt: authenticatedUser?.updatedAt
         });
 
     }catch(err){
