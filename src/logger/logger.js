@@ -1,20 +1,20 @@
 
 const winston = require('winston');
-const {combine, timestamp,label,json} = winston.format;
+const {combine, timestamp,json} = winston.format;
 // const myFormat = printf(({ level, message, label, timestamp }) => {
 //     return `${timestamp} [${label}] ${level}: ${message}`;
 //   });
-const myFormat = json(({level,message,label,timestamp})=>{
+const myFormat = json(({level,message,label,httpRequest})=>{
     return {
-        level,message,label,timestamp
+        level,message,label,httpRequest
     }
 })
 const logger = winston.createLogger({
     format: combine(
-        label({ label: 'User Data' }),
         timestamp(),
         myFormat
       ),
+    // format:myFormat,
     // format: json({timestamp,label,level,message}),
     transports: [
         //
