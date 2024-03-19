@@ -3,7 +3,7 @@ const {validateObject} = require('../util/util')
 const User = db.users;
 const bcrypt = require("bcryptjs");
 const{verifyBasicAuth} = require('../middleware/authenticate');
-
+const {logger} = require('../logger/logger')
 const createUser = async(req,res)=>{
     try{
        
@@ -24,7 +24,10 @@ const createUser = async(req,res)=>{
        
         const response = await User.create(user);
 
-       
+       logger.log({
+        level: 'info',
+        message: ' User Created'
+       })
         res.status(201).json({
             emailId:response.emailId,
             firstName:response?.firstName,
@@ -79,6 +82,10 @@ const updateUser = async(req,res)=>{
     }
        const response = await User.update(user,{where:{emailId: clientCredentials.emailId}});
        console.log(response);
+       logger.log({
+        level: 'info',
+        message: ' User Updated'
+       })
        res.status(204).send();
     }
     catch(err){
