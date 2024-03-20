@@ -86,6 +86,6 @@ build {
   }
 
   provisioner "shell" {
-    scripts = ["setup.sh", "systemd.sh"]
+    scripts = ["setup.sh", "systemd.sh","setupCloudOps.sh"]
   }
 }

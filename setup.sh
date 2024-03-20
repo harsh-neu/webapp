@@ -1,14 +1,14 @@
 #! /bin/bash
 # echo "in setup"
-# sudo yum install -y mysql-server
-#  sudo systemctl start mysqld
-#  sudo systemctl enable mysqld
+sudo yum install -y mysql-server
+ sudo systemctl start mysqld
+ sudo systemctl enable mysqld
 
-# sudo mysql -u root -e "ALTER USER 'root'@'localhost' IDENTIFIED WITH mysql_native_password BY 'Chocoslam'";
-# sudo mysql -u root -pChocoslam -e "FLUSH PRIVILEGES";
-# echo "create db"
-# sudo systemctl restart mysqld
-# sudo mysql -u root -pChocoslam -e "CREATE DATABASE demoDb;"
+sudo mysql -u root -e "ALTER USER 'root'@'localhost' IDENTIFIED WITH mysql_native_password BY 'Chocoslam'";
+sudo mysql -u root -pChocoslam -e "FLUSH PRIVILEGES";
+echo "create db"
+sudo systemctl restart mysqld
+sudo mysql -u root -pChocoslam -e "CREATE DATABASE demoDb;"
 sudo curl -sSO https://dl.google.com/cloudagents/add-google-cloud-ops-agent-repo.sh
 sudo bash add-google-cloud-ops-agent-repo.sh --also-install
 echo "create users"
@@ -21,13 +21,14 @@ sudo dnf module -y install nodejs:20/common
 sudo dnf -y install unzip
 echo "change ownership"
 sudo chown -R "csye6225:csye6225"  "/opt/"
+
 ls -l /tmp
 sudo unzip "/tmp/webapp.zip" -d  "/opt/webapp"
-
-
+sudo chown -R "csye6225:csye6225"  "/opt/webapp/"
 ls -l "/opt"
 cd /opt/webapp
 sudo npm install
+cd ~
 
 # googlecompute.csye6225-custom-image: Created symlink /etc/systemd/system/multi-user.target.wants/mysqld.service → /usr/lib/systemd/system/mysqld.service.
 # ==> googlecompute.csye6225-custom-image: ERROR 1045 (28000): Access denied for user 'root'@'localhost' (using password: NO)
