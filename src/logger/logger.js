@@ -18,7 +18,6 @@ const logger = winston.createLogger({
     // format: json({timestamp,label,level,message}),
     transports: process.env.ENVIRONMENT === "PRODUCTION" ?
         [
-            new winston.transports.File({ filename: '/var/log/webapp/error.log', level: 'error' }),
             new winston.transports.File({ filename: '/var/log/webapp/combined.log' })
         ] :
         [
