@@ -34,6 +34,7 @@ const createUser = async(req,res)=>{
         }
        })
         res.status(201).json({
+            id:response.id,
             emailId:response.emailId,
             firstName:response?.firstName,
             lastName:response?.lastName,
@@ -170,6 +171,7 @@ const getUser = async(req,res)=>{
             }
            })
         res.status(200).json({
+            id:authenticatedUser.id,
             emailId:authenticatedUser.emailId,
             firstName:authenticatedUser?.firstName,
             lastName:authenticatedUser?.lastName,
