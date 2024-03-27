@@ -36,8 +36,10 @@ const createUser = async(req,res)=>{
             httpMethod:'POST'
         }
        })
-
-       await publishMessage(JSON.stringify(response));
+       if(process.env.ENVIRONMENT === "PRODUCTION"){
+        await publishMessage(JSON.stringify(response));
+       }
+            
         res.status(201).json({
             id:response.id,
             emailId:response.emailId,
@@ -89,11 +91,13 @@ const updateUser = async(req,res)=>{
             res.status(401).send();
             throw ({err:'Unauthenticated',message:"user is not authenticated"})
         }
-
-        if(!authenticatedUser.verified){
-            res.status(403).send('Please Verify User');
+        if(process.env.ENVIRONMENT === "PRODUCTION"){
+            if(!authenticatedUser.verified){
+                res.status(403).send('Please Verify User');
+            }
         }
-        
+       
+
         if(!validateObject(req.body,["firstName","lastName","password"])){
             res.status(400).send();
             throw ({err:'Invalid Query',message:"The Query is Invalid"})
@@ -160,8 +164,10 @@ const getUser = async(req,res)=>{
             throw ({err:'Unauthenticated',message:"user is not authenticated"})
 
         }
-        if(!authenticatedUser.verified){
-            res.status(403).send('Please Verify User');
+        if(process.env.ENVIRONMENT === "PRODUCTION"){
+            if(!authenticatedUser.verified){
+                res.status(403).send('Please Verify User');
+            }
         }
         const correctPassword =  bcrypt.compareSync(clientCredentials.password,authenticatedUser.password);
         if(!correctPassword){
