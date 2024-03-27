@@ -1,9 +1,11 @@
 const {db} = require('../model');
 const {validateObject} = require('../util/util')
 const User = db.users;
+const Verification = db.verification;
 const bcrypt = require("bcryptjs");
 const{verifyBasicAuth} = require('../middleware/authenticate');
-const {logger} = require('../logger/logger')
+const {logger} = require('../logger/logger');
+const {publishMessage} = require('../pubsub/pubsub')
 const createUser = async(req,res)=>{
     try{
        
@@ -21,7 +23,8 @@ const createUser = async(req,res)=>{
             emailId: req.body.emailId ,
             password: req.body.password,
             firstName: req.body.firstName,
-            lastName: req.body.lastName
+            lastName: req.body.lastName,
+            verified: false
         }
        
         const response = await User.create(user);
@@ -33,6 +36,8 @@ const createUser = async(req,res)=>{
             httpMethod:'POST'
         }
        })
+
+       await publishMessage(JSON.stringify(response));
         res.status(201).json({
             id:response.id,
             emailId:response.emailId,
@@ -193,4 +198,40 @@ const getUser = async(req,res)=>{
     }
 }
 
-module.exports = {createUser,updateUser,getUser};
+const verify = async(req,res)=>{
+    try{
+        const token = req.params.token;
+        const verificationEntry = await Verification.findOne({ where: { uuid: token } });
+        if (!verificationEntry) {
+            return res.status(403).send('Invalid token');
+        }
+    
+        const createdAtTime = new Date(verificationEntry.createdAt);
+        const currentTime = new Date();
+        const differenceInMilliseconds = currentTime - createdAtTime;
+        const differenceInMinutes = differenceInMilliseconds / (1000 * 60);
+    
+        if (differenceInMinutes >= 2) {
+            logger.log({
+                label: "User Fetch",
+                level: 'error',
+                message: 'Verification link expired',
+                httpRequest: {
+                    httpMethod: 'Get'
+                }
+            });
+            return res.status(403).send('Link expired');
+        }
+    
+        const verified = { verified: true };
+        await User.update(verified, { where: { emailId: verificationEntry.emailId } });
+        return res.status(200).send('Verification successful');
+
+    }
+    catch(err){
+        console.log(err);
+    }
+
+}
+
+module.exports = {createUser,updateUser,getUser,verify};

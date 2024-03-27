@@ -1,6 +1,6 @@
 variable "project_id" {
   description = "The ID of the Google Cloud project"
-  default     = "webapp-develop-415501"
+  default     = 	"webapp-develop-418404"
 }
 
 variable "source_image_family" {
@@ -10,7 +10,7 @@ variable "source_image_family" {
 
 variable "zone" {
   description = "The zone in which to build the image"
-  default     = "us-central1-a"
+  default     = "us-east1-c"
 }
 
 variable "disk_size" {
@@ -40,7 +40,7 @@ variable "image_family" {
 
 variable "image_project_id" {
   description = "The ID of the project where the custom image will be stored"
-  default     = "webapp-develop-415501"
+  default     = "webapp-develop-418404"
 }
 
 variable "image_storage_locations" {

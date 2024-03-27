@@ -48,7 +48,7 @@ db.Sequelize = Sequelize;
 db.sequelize = sequelize;
 
 db.users = require('./userModel.js')(sequelize,DataTypes);
-
+db.verification = require('./verificationModel.js')(sequelize,DataTypes);
 //if we keep it as trueit will recreate tables
 db.sequelize.sync({force:false})
 .then(()=>{

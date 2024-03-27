@@ -20,6 +20,11 @@ module.exports = (sequelize, DataTypes) =>{
         lastName:{
             type: DataTypes.STRING,
             allowNull:false,
+        },
+        verified:{
+            type: DataTypes.BOOLEAN,
+            allowNull:false,
+            defaultValue: false
         }
         
     },{
