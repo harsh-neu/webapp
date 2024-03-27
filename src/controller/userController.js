@@ -89,6 +89,11 @@ const updateUser = async(req,res)=>{
             res.status(401).send();
             throw ({err:'Unauthenticated',message:"user is not authenticated"})
         }
+
+        if(!authenticatedUser.verified){
+            res.status(403).send('Please Verify User');
+        }
+        
         if(!validateObject(req.body,["firstName","lastName","password"])){
             res.status(400).send();
             throw ({err:'Invalid Query',message:"The Query is Invalid"})
@@ -155,7 +160,9 @@ const getUser = async(req,res)=>{
             throw ({err:'Unauthenticated',message:"user is not authenticated"})
 
         }
-        
+        if(!authenticatedUser.verified){
+            res.status(403).send('Please Verify User');
+        }
         const correctPassword =  bcrypt.compareSync(clientCredentials.password,authenticatedUser.password);
         if(!correctPassword){
             res.status(401).send();
@@ -200,7 +207,12 @@ const getUser = async(req,res)=>{
 
 const verify = async(req,res)=>{
     try{
-        const token = req.params.token;
+        console.log(req);
+        const {token} = req.query;
+        if(!token){
+            res.status(400).send('Invalid req');
+        }
+        console.log(token);
         const verificationEntry = await Verification.findOne({ where: { uuid: token } });
         if (!verificationEntry) {
             return res.status(403).send('Invalid token');
