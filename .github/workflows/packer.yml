@@ -70,10 +70,10 @@ jobs:
         if: success()
         run: packer validate webappPacker.pkr.hcl
       - name: Fetch Secrets
-        run: db_host=gcloud secrets versions access latest --secret=db_host
-             db_pass=gcloud secrets versions access latest --secret=db-password
-             db_name=gcloud secrets versions access latest --secret=db_name
-             db_user=gcloud secrets versions access latest --secret=db_username
+        run: db_host=$(gcloud secrets versions access latest --secret=db_host)
+             db_pass=$(gcloud secrets versions access latest --secret=db-password)
+             db_name=$(gcloud secrets versions access latest --secret=db_name)
+             db_user=$(gcloud secrets versions access latest --secret=db_username)
              echo $db_host
              echo $db_pass
              echo $db_name
@@ -82,11 +82,12 @@ jobs:
       - name: Build Packer
         if: success()
         run: packer build -machine-readable webappPacker.pkr.hcl | tee build.log IMAGE_ID=$(grep 'artifact,0,id' build.log | cut -d, -f6 | cut -d' ' -f2)
+              echo ${IMAGE_ID}
 
      
       - name: Get Script
         run: touch environment.sh 
-          cat $(cat ${{secrets.ENVIRONMENTFILE}}) > environment.sh
+            cat $(cat ${{secrets.ENVIRONMENTFILE}}) > environment.sh
       - name: Create Instance Template
         run: |
           TIMESTAMP=$(date +"%Y%m%d%H%M%S") 
