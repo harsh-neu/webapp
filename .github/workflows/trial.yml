@@ -9,6 +9,15 @@ jobs:
     steps:
       - name: Check out repository code
         uses: actions/checkout@v4
+      - name: Authenticate gcloud
+        id: auth 
+        uses: google-github-actions/auth@v2
+        with:
+          credentials_json: "${{ secrets.SERVICE_ACCOUNT_JSON}}"
+      - name: Setup gcloud 
+        uses: google-github-actions/setup-gcloud@v2
+      - name: gcloud CLI
+        run: gcloud info  
       - name: Build Packer
         run: |
           echo "csye6225-1712777071" > IMAGE_ID.txt
