@@ -28,13 +28,13 @@ jobs:
             echo "DB_USER=$(echo $(gcloud secrets versions access latest --secret='db_username') | base64 --decode)" >> $GITHUB_ENV
             echo "KMS_KEY_SELF_LINK=$(echo $(gcloud secrets versions access latest --secret='kms_key') | base64 --decode)" >> $GITHUB_ENV
             echo "SERVICE_ACCOUNT_EMAIL=$(echo $(gcloud secrets versions access latest --secret='service_account_email') | base64 --decode)" >> $GITHUB_ENV
-            - name: Create Instance Template
-            run: |
+        - name: Create Instance Template
+          run: |
               TIMESTAMP=$(date +"%Y%m%d%H%M%S") 
               TEMPLATE_NAME=${csye6225-custom-instance-$TIMESTAMP} 
               gcloud compute instance-templates create-with-container csye6225-custom-instance-$TIMESTAMP \
               --machine-type=e2-standard-2
-              --container-image=$IMAGE_ID
+              --container-image=csye6225-1712777071
               --subnet=webapp \
               --region=us-east1 \
               --service-account=$SERVICE_ACCOUNT_EMAIL\
@@ -43,5 +43,38 @@ jobs:
               --metadata-from-file=startup-script="./environment.sh" \
               --boot-disk-type=pd-balanced \
               --boot-disk-kms-key=$KMS_KEY_SELF_LINK
+        - name: Create Instance Template
+          run: |
+                TIMESTAMP=$(date +"%Y%m%d%H%M%S") 
+                TEMPLATE_NAME=${csye6225-custom-instance-$TIMESTAMP} 
+                gcloud compute instance-templates create-with-container csye6225-custom-instance-$TIMESTAMP \
+                --machine-type=e2-standard-2
+                --container-image=$IMAGE_ID
+                --subnet=webapp \
+                --region=us-east1 \
+                --service-account=$SERVICE_ACCOUNT_EMAIL\
+                --scopes=https://www.googleapis.com/auth/cloud-platform \
+                --metadata=db-user=$DB_USER,db-name=$DB_NAME,db-host=$DB_HOST,db-pass=$DB_PASSWORD,startup-script="${{secrets.ENVIRONMENTFILE}}" \
+                --boot-disk-type=pd-balanced \
+                --boot-disk-kms-key=$KMS_KEY_SELF_LINK
+                - name: Configure MIG
+                run: 
+                  gcloud compute instance-groups managed set-instance-template INSTANCE_GROUP_NAME \
+                  --template=csye6225-custom-instance-$TIMESTAMP \
+                  --region us-east1
+                  --zone=YOUR_ZONE
+                env:
+                  INSTANCE_GROUP_NAME: webapp-igm
+                  YOUR_ZONE: us-east1-c
+        - name: Rolling Update
+          run: gcloud compute instance-groups managed rolling-action start-update INSTANCE_GROUP_NAME \
+              --version=template=${TEMPLATE_NAME}
+              [--zone=ZONE | --region=REGION]
+          env:
+                INSTANCE_GROUP_NAME: webapp-igm
+                ZONE: us-east1-c
+                REGION: us-east1
+  
+  
             
       
