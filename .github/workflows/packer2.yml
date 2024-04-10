@@ -52,7 +52,7 @@ jobs:
                   gcloud compute instance-groups managed set-instance-template $INSTANCE_GROUP_NAME \
                   --template=projects/${{ secrets.PROJECT_ID }}/regions/${{ secrets.REGION }}/instanceTemplates/$TEMPLATE_NAME \ 
                   --region=${{secrets.REGION}}
-                  --zone=$YOUR_ZONE
+      
           env:
                   INSTANCE_GROUP_NAME: webapp-igm
                   YOUR_ZONE: us-east1-c
