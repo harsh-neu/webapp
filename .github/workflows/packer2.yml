@@ -49,17 +49,17 @@ jobs:
 
         - name: Configure MIG
           run: |
-                  gcloud compute instance-groups managed set-instance-template INSTANCE_GROUP_NAME \
-                  --template=$TEMPLATE_NAME \
+                  gcloud compute instance-groups managed set-instance-template $INSTANCE_GROUP_NAME \
+                  --template=csye6225-custom-instance-$TIMESTAMP \
                   --region us-east1
-                  --zone=YOUR_ZONE
+                  --zone=$YOUR_ZONE
           env:
                   INSTANCE_GROUP_NAME: webapp-igm
                   YOUR_ZONE: us-east1-c
         - name: Rolling Update
-          run: gcloud compute instance-groups managed rolling-action start-update INSTANCE_GROUP_NAME \
-              --version=template=${TEMPLATE_NAME}
-              [--zone=ZONE | --region=REGION]
+          run: gcloud compute instance-groups managed rolling-action start-update $INSTANCE_GROUP_NAME \
+              --version=template=${TEMPLATE_NAME} \
+              [--zone=$ZONE | --region=$REGION]
           env:
                 INSTANCE_GROUP_NAME: webapp-igm
                 ZONE: us-east1-c
