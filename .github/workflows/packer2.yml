@@ -55,8 +55,10 @@ jobs:
           run: |
 
 
+
               gcloud compute instance-groups managed set-instance-template webapp-igm \
               --template=projects/webapp-develop-418404/regions/us-east1/instanceTemplates/$TEMPLATE_NAME \ 
+
               --region=${{secrets.REGION}}
           
         - name: Rolling Update
