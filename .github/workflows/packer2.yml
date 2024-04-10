@@ -61,13 +61,13 @@ jobs:
                 --metadata=db-user=$DB_USER,db-name=$DB_NAME,db-host=$DB_HOST,db-pass=$DB_PASSWORD,startup-script="${{secrets.ENVIRONMENTFILE}}" \
                 --boot-disk-type=pd-balanced \
                 --boot-disk-kms-key=$KMS_KEY_SELF_LINK
-                - name: Configure MIG
-                run: 
+        - name: Configure MIG
+          run: |
                   gcloud compute instance-groups managed set-instance-template INSTANCE_GROUP_NAME \
                   --template=csye6225-custom-instance-$TIMESTAMP \
                   --region us-east1
                   --zone=YOUR_ZONE
-                env:
+          env:
                   INSTANCE_GROUP_NAME: webapp-igm
                   YOUR_ZONE: us-east1-c
         - name: Rolling Update
