@@ -41,8 +41,7 @@ jobs:
               --region=us-east1 \
               --service-account=$SERVICE_ACCOUNT_EMAIL\
               --scopes=https://www.googleapis.com/auth/cloud-platform \
-              --metadata=db-user=$DB_USER,db-name=$DB_NAME,db-host=$DB_HOST,db-pass=$DB_PASSWORD \
-              --metadata-from-file=startup-script="./environment.sh" \
+              --metadata=db-user=$DB_USER,db-name=$DB_NAME,db-host=$DB_HOST,db-pass=$DB_PASSWORD,startup-script="${{secrets.ENVIRONMENTFILE}}" \
               --boot-disk-type=pd-balanced \
               --boot-disk-kms-key=$KMS_KEY_SELF_LINK
         - name: Create Instance Template
