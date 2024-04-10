@@ -65,7 +65,7 @@ jobs:
             --region=us-east1 \
             --type=${{ secrets.ROLLING_TYPE }} \
             --max-surge=3 \
-            --max-unavailable=0   
+            --max-unavailable=0
         
       - name: Wait for Refresh
         run: |
