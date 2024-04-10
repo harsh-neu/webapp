@@ -35,7 +35,9 @@ jobs:
               TIMESTAMP=$(date +"%Y%m%d%H%M%S") 
 
               TEMPLATE_NA="csye6225-custom-instance-$TIMESTAMP"
+
               echo "TEMPLATE_NAME=csye6225-custom-instance-$TIMESTAMP" >> $GITHUB_ENV
+
               gcloud compute instance-templates create $TEMPLATE_NAME \
               --machine-type=e2-standard-2 \
               --image=$image_name \
@@ -49,10 +51,12 @@ jobs:
 
         - name: Configure MIG
           run: |
-                  gcloud compute instance-groups managed set-instance-template $INSTANCE_GROUP_NAME \
-                  --template=projects/${{ secrets.PROJECT_ID }}/regions/${{ secrets.REGION }}/instanceTemplates/$TEMPLATE_NAME \ 
-                  --region=${{secrets.REGION}}
-                  --zone=$YOUR_ZONE
+
+              gcloud compute instance-groups managed set-instance-template $INSTANCE_GROUP_NAME \
+              --template=projects/${{ secrets.PROJECT_ID }}/regions/${{ secrets.REGION }}/instanceTemplates/$TEMPLATE_NAME \ 
+              --region=${{secrets.REGION}}
+
+      
           env:
                   INSTANCE_GROUP_NAME: webapp-igm
                   YOUR_ZONE: us-east1-c
