@@ -11,6 +11,41 @@ jobs:
     steps:
         - name: Check out repository code
           uses: actions/checkout@v4
+        - name: Node.js setup
+          uses: actions/setup-node@v2
+          with:
+            node-version: '14.x'
+        - name: Start MySQL
+          run: |
+            sudo /etc/init.d/mysql start
+        - name: Debug Secrets
+          run: |
+            echo "Git User: ${{ secrets.GIT_USER }}"
+            echo "DB Password: ${{ secrets.DB_PASSWORD }}"
+        - name: Connect to MySQL
+          run:  mysql --user=root --password=root
+        - name: Create DB    
+          run:  mysql -e "CREATE DATABASE IF NOT EXISTS $DB_DATABASE;" -u $DB_USER -p$DB_PASSWORD
+          env: 
+            DB_DATABASE: demoDb
+            DB_USER: root
+            DB_PASSWORD: root
+
+        - name: Zip webapp
+          run:  |
+            zip -r webapp.zip . -x   ".git/*" ".github/*"
+
+        - name: Install dependencies
+          run: npm install
+
+        - name: Run tests
+          run: npm test
+          env: 
+              DB: demoDb
+              USER_NAME: root
+              DB_PASSWORD: root
+              PORT: 3000
+              HOST: localhost
         - name: Authenticate gcloud
           id: auth 
           uses: google-github-actions/auth@v2
@@ -20,16 +55,32 @@ jobs:
           uses: google-github-actions/setup-gcloud@v2
         - name: gcloud CLI
           run: gcloud info
+        - name: Initialize Packer
+          id: init
+          if: success()
+          run: packer init webappPacker.pkr.hcl
+        - name: Format pkr
+          id: fmt
+          if: success()
+          run: packer fmt webappPacker.pkr.hcl
+        - name: Validate Packer
+          if: success()
+          run: packer validate webappPacker.pkr.hcl
+        
+        - name: Build Packer
+          run: |
+            packer build image.pkr.hcl | tee output.txt
+            echo $(cat output.txt | grep 'project: csye6225-*' | cut -d ' ' -f 12) > IMAGE_ID.txt
         - name: Fetch Secrets
           run: |
-            echo "csye6225-1712777071" > imagename.txt
+           
             echo "DB_HOST=$(echo $(gcloud secrets versions access latest --secret='db_host') )" >> $GITHUB_ENV
             echo "DB_NAME=$(echo $(gcloud secrets versions access latest --secret='db_name') )" >> $GITHUB_ENV
             echo "DB_PASSWORD=$(echo $(gcloud secrets versions access latest --secret='db-password') )" >> $GITHUB_ENV
             echo "DB_USER=$(echo $(gcloud secrets versions access latest --secret='db_username') )" >> $GITHUB_ENV
             echo "KMS_KEY_SELF_LINK=$(echo $(gcloud secrets versions access latest --secret='kms_key') )" >> $GITHUB_ENV
             echo "SERVICE_ACCOUNT_EMAIL=$(echo $(gcloud secrets versions access latest --secret='service_account_email') )" >> $GITHUB_ENV
-            echo "image_name=$(cat imagename.txt)" >> $GITHUB_ENV
+            echo "image_name=$(cat IMAGE_ID.txt)" >> $GITHUB_ENV
         - name: Create Instance Template
           run: |
               TIMESTAMP=$(date +"%Y%m%d%H%M%S") 
@@ -56,7 +107,8 @@ jobs:
           run: |
               gcloud compute instance-groups managed set-instance-template webapp-igm \
               --template=projects/webapp-develop-418404/regions/us-east1/instanceTemplates/$TEMPLATE_NAME \ 
-              --region=us-east1
+              --region=${{secrets.REGION}}
+
           
         - name: Rolling Update
           run: |
