@@ -22,12 +22,15 @@ jobs:
           run: gcloud info
         - name: Fetch Secrets
           run: |
+            touch imagename.txt
+            csye6225-1712777071>imagename.txt
             echo "DB_HOST=$(echo $(gcloud secrets versions access latest --secret='db_host') )" >> $GITHUB_ENV
             echo "DB_NAME=$(echo $(gcloud secrets versions access latest --secret='db_name') )" >> $GITHUB_ENV
             echo "DB_PASSWORD=$(echo $(gcloud secrets versions access latest --secret='db-password') )" >> $GITHUB_ENV
             echo "DB_USER=$(echo $(gcloud secrets versions access latest --secret='db_username') )" >> $GITHUB_ENV
             echo "KMS_KEY_SELF_LINK=$(echo $(gcloud secrets versions access latest --secret='kms_key') )" >> $GITHUB_ENV
             echo "SERVICE_ACCOUNT_EMAIL=$(echo $(gcloud secrets versions access latest --secret='service_account_email') )" >> $GITHUB_ENV
+            echo "image_name=$(cat imagename.txt)" >> $GITHUB_ENV
         - name: Create Instance Template
           run: |
               TIMESTAMP=$(date +"%Y%m%d%H%M%S") 
@@ -46,10 +49,11 @@ jobs:
         - name: Create Instance Template
           run: |
                 TIMESTAMP=$(date +"%Y%m%d%H%M%S") 
+  
                 TEMPLATE_NAME=${csye6225-custom-instance-$TIMESTAMP} 
                 gcloud compute instance-templates create-with-container csye6225-custom-instance-$TIMESTAMP \
                 --machine-type=e2-standard-2
-                --image=csye6225-1712777071
+                --image=$image_name
                 --subnet=webapp \
                 --region=us-east1 \
                 --service-account=$SERVICE_ACCOUNT_EMAIL\
