@@ -39,7 +39,7 @@ jobs:
               --image=$image_name \
               --subnet=webapp \
               --region=us-east1 \
-              --service-account=$SERVICE_ACCOUNT_EMAIL\
+              --service-account=$SERVICE_ACCOUNT_EMAIL \
               --scopes=https://www.googleapis.com/auth/cloud-platform \
               --metadata=db-user=$DB_USER,db-name=$DB_NAME,db-host=$DB_HOST,db-pass=$DB_PASSWORD,startup-script="${{secrets.ENVIRONMENTFILE}}" \
               --boot-disk-type=pd-balanced \
