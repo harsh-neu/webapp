@@ -49,9 +49,9 @@ jobs:
 
         - name: Configure MIG
           run: |
-                  gcloud compute instance-groups managed set-instance-template $INSTANCE_GROUP_NAME \
-                  --template=projects/${{ secrets.PROJECT_ID }}/regions/${{ secrets.REGION }}/instanceTemplates/$TEMPLATE_NAME \ 
-                  --region=${{secrets.REGION}}
+              gcloud compute instance-groups managed set-instance-template $INSTANCE_GROUP_NAME \
+              --template=projects/${{ secrets.PROJECT_ID }}/regions/${{ secrets.REGION }}/instanceTemplates/$TEMPLATE_NAME \ 
+              --region=${{secrets.REGION}}
       
           env:
                   INSTANCE_GROUP_NAME: webapp-igm
