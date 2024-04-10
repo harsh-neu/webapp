@@ -60,12 +60,12 @@ jobs:
             --region=us-east1
       - name: Rolling Update
         run: |
-            gcloud compute instance-groups managed rolling-action start-update webapp-igm \
-            --version template=projects/webapp-develop-418404/regions/us-east1/instanceTemplates/$TEMPLATE_NAME \ 
-            --region=us-east1 \
-            --type=${{ secrets.ROLLING_TYPE }} \
-            --max-surge=3 \
-            --max-unavailable=0
+          gcloud compute instance-groups managed rolling-action start-update webapp-igm \
+          --version template=projects/webapp-develop-418404/regions/us-east1/instanceTemplates/$TEMPLATE_NAME \
+          --region=us-east1 \
+          --type=${{secrets.ROLLING_TYPE}}
+          --max-surge=3
+          --max-unavailable=0
         
       - name: Wait for Refresh
         run: |
