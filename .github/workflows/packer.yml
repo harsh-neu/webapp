@@ -70,19 +70,19 @@ jobs:
         if: success()
         run: packer validate webappPacker.pkr.hcl
       - name: Fetch Secrets
-        run: db_host=$(gcloud secrets versions access latest --secret=db_host)
-             db_pass=$(gcloud secrets versions access latest --secret=db-password)
-             db_name=$(gcloud secrets versions access latest --secret=db_name)
-             db_user=$(gcloud secrets versions access latest --secret=db_username)
-             echo $db_host
-             echo $db_pass
-             echo $db_name
-             echo $db_user
-
+        run: |
+          echo "DB_HOST=$(echo $(gcloud secrets versions access latest --secret='db_host') | base64 --decode)" >> $GITHUB_ENV
+          echo "DB_NAME=$(echo $(gcloud secrets versions access latest --secret='db_name') | base64 --decode)" >> $GITHUB_ENV
+          echo "DB_PASSWORD=$(echo $(gcloud secrets versions access latest --secret='db-password') | base64 --decode)" >> $GITHUB_ENV
+          echo "DB_USER=$(echo $(gcloud secrets versions access latest --secret='db_username') | base64 --decode)" >> $GITHUB_ENV
+          echo "KMS_KEY_SELF_LINK=$(echo $(gcloud secrets versions access latest --secret='kms_key') | base64 --decode)" >> $GITHUB_ENV
+          echo "SERVICE_ACCOUNT_EMAIL=$(echo $(gcloud secrets versions access latest --secret='service_account_email') | base64 --decode)" >> $GITHUB_ENV
+          
+         
       - name: Build Packer
         if: success()
         run: packer build -machine-readable webappPacker.pkr.hcl | tee build.log IMAGE_ID=$(grep 'artifact,0,id' build.log | cut -d, -f6 | cut -d' ' -f2)
-              echo ${IMAGE_ID}
+              echo IMAGE_ID
 
      
       - name: Get Script
@@ -97,11 +97,12 @@ jobs:
           --container-image=$IMAGE_ID
           --subnet=webapp \
           --region=us-east1 \
-          --service-account=797447009423-compute@developer.gserviceaccount.com \
+          --service-account=$SERVICE_ACCOUNT_EMAIL\
           --scopes=https://www.googleapis.com/auth/cloud-platform \
-          --metadata=db-user=$db_user,db-name=db_name,db-host=$db_host,db-pass=$db_pass \
-          --metadata-from-file=startup-script=./environment.sh \
-          --boot-disk-type=pd-balanced
+          --metadata=db-user=$DB_USER,db-name=$DB_NAME,db-host=$DB_HOST,db-pass=$DB_PASSWORD \
+          --metadata-from-file=startup-script="./environment.sh" \
+          --boot-disk-type=pd-balanced \
+          --boot-disk-kms-key=$KMS_KEY_SELF_LINK
       - name: Configure MIG
         run: 
           gcloud compute instance-groups managed set-instance-template INSTANCE_GROUP_NAME \
