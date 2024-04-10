@@ -71,6 +71,47 @@ jobs:
         run: packer validate webappPacker.pkr.hcl
       - name: Build Packer
         if: success()
-        run: packer build webappPacker.pkr.hcl
-    
+        run: packer build -machine-readable webappPacker.pkr.hcl | tee build.log IMAGE_ID=$(grep 'artifact,0,id' build.log | cut -d, -f6 | cut -d' ' -f2)
+
+      - name: Fetch Secrets
+        run: db_host=$(gcloud secrets versions access latest --secret=db_host)
+             db_pass=$(gcloud secrets versions access latest --secret="db-password)
+             db_name=$(gcloud secrets versions access latest --secret=db_name)
+             db_user=$(gcloud secrets versions access latest --secret=db_username)
+      - name: Get Script
+        run: touch environment.sh 
+            cat "$(cat ${{secrets.ENVIRONMENTFILE}})" > environment.sh
+      - name: Create Instance Template
+        run: |
+          TIMESTAMP=$(date +"%Y%m%d%H%M%S") 
+          TEMPLATE_NAME=${csye6225-custom-instance-$TIMESTAMP} 
+          gcloud compute instance-templates create-with-container csye6225-custom-instance-$TIMESTAMP \
+          --machine-type=e2-standard-2
+          --container-image=$IMAGE_ID
+          --subnet=webapp \
+          --region=us-east1 \
+          --service-account=797447009423-compute@developer.gserviceaccount.com \
+          --scopes=https://www.googleapis.com/auth/cloud-platform \
+          --metadata=db-user=$db_user,db-name=db_name,db-host=$db_host,db-pass=$db_pass \
+          --metadata-from-file=startup-script=./environment.sh \
+          --boot-disk-type=pd-balanced
+      - name: Configure MIG
+        run: 
+          gcloud compute instance-groups managed set-instance-template INSTANCE_GROUP_NAME \
+          --template=csye6225-custom-instance-$TIMESTAMP \
+          --region us-east1
+          --zone=YOUR_ZONE
+        env:
+          INSTANCE_GROUP_NAME: webapp-igm
+          YOUR_ZONE: us-east1-c
+      - name: Rolling Update
+        run: gcloud compute instance-groups managed rolling-action start-update INSTANCE_GROUP_NAME \
+            --version=template=${TEMPLATE_NAME}
+            [--zone=ZONE | --region=REGION]
+        env:
+              INSTANCE_GROUP_NAME: webapp-igm
+              ZONE: us-east1-c
+              REGION: us-east1
+
+
   
