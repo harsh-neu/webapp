@@ -54,15 +54,16 @@ jobs:
         - name: Configure MIG
           run: |
 
-              echo ${{secrets.INSTANCE_GROUP_NAME}}
-              echo "projects/${{ secrets.PROJECT_ID }}/regions/${{ secrets.REGION }}/instanceTemplates/$TEMPLATE_NAME"
-              gcloud compute instance-groups managed set-instance-template ${{secrets.INSTANCE_GROUP_NAME}} \
-              --template=projects/${{ secrets.PROJECT_ID }}/regions/${{ secrets.REGION }}/instanceTemplates/$TEMPLATE_NAME \ 
+
+
+              gcloud compute instance-groups managed set-instance-template webapp-igm \
+              --template=projects/webapp-develop-418404/regions/us-east1/instanceTemplates/$TEMPLATE_NAME \ 
+
               --region=${{secrets.REGION}}
           
         - name: Rolling Update
           run: gcloud compute instance-groups managed rolling-action start-update ${{secrets.INSTANCE_GROUP_NAME}} \
-              --version template= --template=projects/${{ secrets.PROJECT_ID }}/regions/${{ secrets.REGION }}/instanceTemplates/$TEMPLATE_NAME \ 
+              --version template= --template=pprojects/webapp-develop-418404/regions/us-east1/instanceTemplates/$TEMPLATE_NAME \ 
               --region=${{ secrets.REGION }} \
               --type=${{ secrets.ROLLING_TYPE }} \
               --max-surge=3 \
