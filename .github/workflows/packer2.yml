@@ -1,0 +1,47 @@
+name: Workflow for DB 
+on:
+  pull_request:
+    types:
+      - closed
+
+jobs:
+  after_merge:
+    if: github.event.pull_request.merged == true
+    runs-on: ubuntu-latest
+    steps:
+        - name: Check out repository code
+          uses: actions/checkout@v4
+        - name: Authenticate gcloud
+          id: auth 
+          uses: google-github-actions/auth@v2
+          with:
+            credentials_json: "${{ secrets.SERVICE_ACCOUNT_JSON}}"
+        - name: Setup gcloud 
+          uses: google-github-actions/setup-gcloud@v2
+        - name: gcloud CLI
+          run: gcloud info
+        - name: Fetch Secrets
+          run: |
+            echo "DB_HOST=$(echo $(gcloud secrets versions access latest --secret='db_host') | base64 --decode)" >> $GITHUB_ENV
+            echo "DB_NAME=$(echo $(gcloud secrets versions access latest --secret='db_name') | base64 --decode)" >> $GITHUB_ENV
+            echo "DB_PASSWORD=$(echo $(gcloud secrets versions access latest --secret='db-password') | base64 --decode)" >> $GITHUB_ENV
+            echo "DB_USER=$(echo $(gcloud secrets versions access latest --secret='db_username') | base64 --decode)" >> $GITHUB_ENV
+            echo "KMS_KEY_SELF_LINK=$(echo $(gcloud secrets versions access latest --secret='kms_key') | base64 --decode)" >> $GITHUB_ENV
+            echo "SERVICE_ACCOUNT_EMAIL=$(echo $(gcloud secrets versions access latest --secret='service_account_email') | base64 --decode)" >> $GITHUB_ENV
+            - name: Create Instance Template
+            run: |
+              TIMESTAMP=$(date +"%Y%m%d%H%M%S") 
+              TEMPLATE_NAME=${csye6225-custom-instance-$TIMESTAMP} 
+              gcloud compute instance-templates create-with-container csye6225-custom-instance-$TIMESTAMP \
+              --machine-type=e2-standard-2
+              --container-image=$IMAGE_ID
+              --subnet=webapp \
+              --region=us-east1 \
+              --service-account=$SERVICE_ACCOUNT_EMAIL\
+              --scopes=https://www.googleapis.com/auth/cloud-platform \
+              --metadata=db-user=$DB_USER,db-name=$DB_NAME,db-host=$DB_HOST,db-pass=$DB_PASSWORD \
+              --metadata-from-file=startup-script="./environment.sh" \
+              --boot-disk-type=pd-balanced \
+              --boot-disk-kms-key=$KMS_KEY_SELF_LINK
+            
+      
