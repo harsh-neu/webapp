@@ -54,8 +54,8 @@ jobs:
         - name: Configure MIG
           run: |
 
-              echo $INSTANCE_GROUP_NAME
-
+              echo ${{secrets.INSTANCE_GROUP_NAME}}
+              echo "projects/${{ secrets.PROJECT_ID }}/regions/${{ secrets.REGION }}/instanceTemplates/$TEMPLATE_NAME"
               gcloud compute instance-groups managed set-instance-template ${{secrets.INSTANCE_GROUP_NAME}} \
               --template=projects/${{ secrets.PROJECT_ID }}/regions/${{ secrets.REGION }}/instanceTemplates/$TEMPLATE_NAME \ 
               --region=${{secrets.REGION}}
