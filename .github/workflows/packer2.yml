@@ -50,20 +50,29 @@ jobs:
         - name: Configure MIG
           run: |
                   gcloud compute instance-groups managed set-instance-template $INSTANCE_GROUP_NAME \
-                  --template=csye6225-custom-instance-$TIMESTAMP \
-                  --region us-east1
+                  --template=projects/${{ secrets.PROJECT_ID }}/regions/${{ secrets.REGION }}/instanceTemplates/$TEMPLATE_NAME \ 
+                  --region=${{secrets.REGION}}
                   --zone=$YOUR_ZONE
           env:
                   INSTANCE_GROUP_NAME: webapp-igm
                   YOUR_ZONE: us-east1-c
         - name: Rolling Update
           run: gcloud compute instance-groups managed rolling-action start-update $INSTANCE_GROUP_NAME \
-              --version=template=${TEMPLATE_NAME} \
-              [--zone=$ZONE | --region=$REGION]
+              --version template= --template=projects/${{ secrets.PROJECT_ID }}/regions/${{ secrets.REGION }}/instanceTemplates/$TEMPLATE_NAME \ 
+              --region=${{ secrets.REGION }} \
+              --type=${{ secrets.ROLLING_TYPE }} \
+              --max-surge=3 \
+              --max-unavailable=0   
           env:
-                INSTANCE_GROUP_NAME: webapp-igm
-                ZONE: us-east1-c
-                REGION: us-east1
+            INSTANCE_GROUP_NAME: webapp-igm 
+        - name: Wait for Refresh
+          run: |
+            gcloud compute instance-groups managed wait-until $secrets.INSTANCE_GROUP_NAME  \
+            --version-target-reached \
+            --region=${{ secrets.REGION }}
+          env:
+            INSTANCE_GROUP_NAME: webapp-igm
+               
   
   
             
