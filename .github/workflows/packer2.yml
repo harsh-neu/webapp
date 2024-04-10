@@ -35,8 +35,8 @@ jobs:
               TIMESTAMP=$(date +"%Y%m%d%H%M%S") 
               TEMPLATE_NAME=${csye6225-custom-instance-$TIMESTAMP} 
               gcloud compute instance-templates create csye6225-custom-instance-$TIMESTAMP \
-              --machine-type=e2-standard-2
-              --image=$image_name
+              --machine-type=e2-standard-2 \
+              --image=$image_name \
               --subnet=webapp \
               --region=us-east1 \
               --service-account=$SERVICE_ACCOUNT_EMAIL\
