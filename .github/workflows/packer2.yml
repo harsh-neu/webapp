@@ -36,7 +36,7 @@ jobs:
               TEMPLATE_NAME=${csye6225-custom-instance-$TIMESTAMP} 
               gcloud compute instance-templates create csye6225-custom-instance-$TIMESTAMP \
               --machine-type=e2-standard-2
-              --image=csye6225-1712777071
+              --image=$image_name
               --subnet=webapp \
               --region=us-east1 \
               --service-account=$SERVICE_ACCOUNT_EMAIL\
