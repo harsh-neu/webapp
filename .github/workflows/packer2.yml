@@ -33,8 +33,10 @@ jobs:
         - name: Create Instance Template
           run: |
               TIMESTAMP=$(date +"%Y%m%d%H%M%S") 
+
               echo "csye6225-custom-instance-$TIMESTAMP" > templateName.txt
               echo "TEMPLATE_NAME=$(cat templateName.txt)" >> $GITHUB_ENV
+
               echo $TEMPLATE_NAME
               gcloud compute instance-templates create $TEMPLATE_NAME \
               --machine-type=e2-standard-2 \
