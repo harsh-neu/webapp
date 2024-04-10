@@ -40,7 +40,6 @@ jobs:
               --instance-template-region=us-east1 \
               --machine-type=e2-standard-2 \
               --image=$image_name \
-              --network=terraform-network
               --subnet=webapp \
               --region=us-east1 \
               --service-account=$SERVICE_ACCOUNT_EMAIL \
