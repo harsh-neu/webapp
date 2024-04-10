@@ -37,6 +37,7 @@ jobs:
               echo "$TEMPLATE_NAME" > templateName.txt
               echo "TEMPLATE_NAME=$(cat templateName.txt)" >> $GITHUB_ENV
               gcloud compute instance-templates create $TEMPLATE_NAME \
+              --instance-template-region=us-east1 \
               --machine-type=e2-standard-2 \
               --image=$image_name \
               --network=terraform-network
