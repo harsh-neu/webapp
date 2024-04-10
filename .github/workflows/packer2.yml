@@ -22,8 +22,7 @@ jobs:
           run: gcloud info
         - name: Fetch Secrets
           run: |
-            touch imagename.txt
-            csye6225-1712777071>imagename.txt
+            echo "csye6225-1712777071" > imagename.txt
             echo "DB_HOST=$(echo $(gcloud secrets versions access latest --secret='db_host') )" >> $GITHUB_ENV
             echo "DB_NAME=$(echo $(gcloud secrets versions access latest --secret='db_name') )" >> $GITHUB_ENV
             echo "DB_PASSWORD=$(echo $(gcloud secrets versions access latest --secret='db-password') )" >> $GITHUB_ENV
