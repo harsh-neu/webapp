@@ -1,0 +1,72 @@
+name: Workflow for DB 
+on:
+  pull_request:
+    branches: [main]
+
+jobs:
+  test-packer:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Check out repository code
+        uses: actions/checkout@v4
+      - name: Build Packer
+        run: |
+          echo "csye6225-1712777071" > IMAGE_ID.txt
+      - name: Fetch Secrets
+        run: |
+          
+          echo "DB_HOST=$(echo $(gcloud secrets versions access latest --secret='db_host') )" >> $GITHUB_ENV
+          echo "DB_NAME=$(echo $(gcloud secrets versions access latest --secret='db_name') )" >> $GITHUB_ENV
+          echo "DB_PASSWORD=$(echo $(gcloud secrets versions access latest --secret='db-password') )" >> $GITHUB_ENV
+          echo "DB_USER=$(echo $(gcloud secrets versions access latest --secret='db_username') )" >> $GITHUB_ENV
+          echo "KMS_KEY_SELF_LINK=$(echo $(gcloud secrets versions access latest --secret='kms_key') )" >> $GITHUB_ENV
+          echo "SERVICE_ACCOUNT_EMAIL=$(echo $(gcloud secrets versions access latest --secret='service_account_email') )" >> $GITHUB_ENV
+          echo "image_name=$(cat IMAGE_ID.txt)" >> $GITHUB_ENV
+      - name: Create Instance Template
+        run: |
+            TIMESTAMP=$(date +"%Y%m%d%H%M%S") 
+
+            TEMPLATE_NAME="csye6225-custom-instance-$TIMESTAMP"
+            echo "$TEMPLATE_NAME" > templateName.txt
+            echo "TEMPLATE_NAME=$(cat templateName.txt)" >> $GITHUB_ENV
+            
+
+            echo $TEMPLATE_NAME
+            gcloud compute instance-templates create $TEMPLATE_NAME \
+            --instance-template-region=${{secrets.REGION}} \
+            --machine-type=e2-standard-2 \
+            --image=$image_name \
+            --subnet=webapp \
+            --region=us-east1 \
+            --service-account=$SERVICE_ACCOUNT_EMAIL \
+            --scopes=https://www.googleapis.com/auth/cloud-platform \
+            --metadata=db-user=$DB_USER,db-name=$DB_NAME,db-host=$DB_HOST,db-pass=$DB_PASSWORD,startup-script="${{secrets.ENVIRONMENTFILE}}" \
+            --boot-disk-type=pd-standard \
+            --boot-disk-kms-key=$KMS_KEY_SELF_LINK
+
+      - name: Configure MIG
+        run: |
+            gcloud compute instance-groups managed set-instance-template webapp-igm \
+            --template=projects/webapp-develop-418404/regions/us-east1/instanceTemplates/$TEMPLATE_NAME
+      - name: Rolling Update
+        run: |
+            gcloud compute instance-groups managed rolling-action start-update ${{secrets.INSTANCE_GROUP_NAME}} \
+            --version template=projects/webapp-develop-418404/regions/us-east1/instanceTemplates/$TEMPLATE_NAME \ 
+            --region=us-east1 \
+            --type=${{ secrets.ROLLING_TYPE }} \
+            --max-surge=3 \
+            --max-unavailable=0   
+        
+      - name: Wait for Refresh
+        run: |
+          gcloud compute instance-groups managed wait-until ${{secrets.INSTANCE_GROUP_NAME}}  \
+          --version-target-reached \
+          --region=${{ secrets.REGION }}
+      
+
+
+          
+    
+
+    
+    
