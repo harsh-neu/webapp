@@ -1,8 +1,7 @@
 name: Workflow for DB 
 on:
   pull_request:
-    types:
-      - closed
+    branches: [main]
 
 jobs:
   after_merge:
@@ -69,7 +68,7 @@ jobs:
         
         - name: Build Packer
           run: |
-            packer build image.pkr.hcl | tee output.txt
+            packer build webappPacker.pkr.hcl | tee output.txt
             echo $(cat output.txt | grep 'project: csye6225-*' | cut -d ' ' -f 12) > IMAGE_ID.txt
         - name: Fetch Secrets
           run: |
@@ -106,7 +105,7 @@ jobs:
         - name: Configure MIG
           run: |
               gcloud compute instance-groups managed set-instance-template webapp-igm \
-              --template=projects/webapp-develop-418404/regions/us-east1/instanceTemplates/$TEMPLATE_NAME \ 
+              --template=projects/webapp-develop-418404/regions/us-east1/instanceTemplates/$TEMPLATE_NAME \
               --region=${{secrets.REGION}}
 
           
