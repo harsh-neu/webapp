@@ -32,7 +32,7 @@ describe("test_user_apis" , ()=>{
     it("should create user in the db, and return proper values", async()=>{
     
          const user1 = await superTest(app)
-        .post('/v1/user')
+        .post('/v2/user')
         .send(user)
         .expect(201)
     })
@@ -40,7 +40,7 @@ describe("test_user_apis" , ()=>{
     it("should get the user created in the db", async()=>{
 
         const user1 = await superTest(app)
-        .get('/v1/user/self')
+        .get('/v2/user/self')
         .set("Authorization", "basic " +  Buffer(`${user.emailId}:${user.password}`).toString("base64"))
         .expect(200)
 
@@ -62,7 +62,7 @@ describe("test_update_apis" , ()=>{
     it("should update user in the db, and return proper values", async()=>{
         const firstName = "xyz";
           await superTest(app)
-        .put('/v1/user/self')
+        .put('/v2/user/self')
         .set("Authorization", "basic " +  Buffer(`${user.emailId}:${user.password}`).toString("base64"))
         .send({firstName})
         .expect(204)
@@ -72,7 +72,7 @@ describe("test_update_apis" , ()=>{
     it("should get the user updated in the db", async()=>{
 
         const user1 = await superTest(app)
-        .get('/v1/user/self')
+        .get('/v2/user/self')
         .set("Authorization", "basic " +  Buffer(`${user.emailId}:${user.password}`).toString("base64"))
         .expect(200)
 
