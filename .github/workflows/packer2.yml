@@ -1,12 +1,10 @@
 name: Workflow for DB 
 on:
   pull_request: 
-    types:
-      - closed
+   branches: [main]
 
 jobs:
   after_merge:
-    if: github.event.pull_request.merged == true
     runs-on: ubuntu-latest
     steps:
         - name: Check out repository code
