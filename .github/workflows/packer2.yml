@@ -96,7 +96,7 @@ jobs:
               --machine-type=e2-standard-2 \
               --image=$image_name \
               --network-interface=network="terraform-network",subnet="webapp" \
-              --tags="webapp"
+              --tags="webapp" \
               --region=us-east1 \
               --service-account=$SERVICE_ACCOUNT_EMAIL \
               --scopes=https://www.googleapis.com/auth/cloud-platform \
