@@ -1,7 +1,9 @@
 name: Workflow for DB 
 on:
   pull_request: 
+
    branches: [main]
+
 
 jobs:
   after_merge:
